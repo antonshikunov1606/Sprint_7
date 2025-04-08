@@ -1,3 +1,16 @@
+URLS = {
+    'base': "https://qa-scooter.praktikum-services.ru/",
+    'login': "https://qa-scooter.praktikum-services.ru/api/v1/courier/login",
+    'courier': "https://qa-scooter.praktikum-services.ru/api/v1/courier",  # для регистрации и удаления
+    'orders': "https://qa-scooter.praktikum-services.ru/api/v1/orders"
+}
+
+credentials = {
+    "login": "anton_shik",
+    "password": "qwerty000",
+    "firstName": "Anton"
+}
+
 data_for_order = [
     {
         "firstName": "Иван",

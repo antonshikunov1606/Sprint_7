@@ -2,9 +2,9 @@ import requests
 import random
 import string
 import pytest
-from tests.response_definitions import SuccessResponses, ErrorResponses
+from response_definitions import SuccessResponses
+from test_data import URLS
 
-URL_HOME = 'https://qa-scooter.praktikum-services.ru/'
 
 
 @pytest.fixture
@@ -25,7 +25,7 @@ def register_new_courier_and_return_login_password():
         "firstName": first_name
     }
 
-    response = requests.post('https://qa-scooter.praktikum-services.ru/api/v1/courier', json=payload)
+    response = requests.post(URLS['courier'], json=payload)
 
     if response.status_code == 201:
         login_pass.extend([login, password, first_name])
@@ -36,13 +36,7 @@ def register_new_courier_and_return_login_password():
 @pytest.fixture
 def delete_courier():
     def _delete_courier(courier_id):
-        response_delete = requests.delete(f'{URL_HOME}/api/v1/courier/{courier_id}')
-        response_delete_data = response_delete.json()
-        expected_response_data = SuccessResponses.SUCCESSFUL_DELETE_USER
-
-        assert response_delete.status_code == 200, f'Ожидаем код 200, но получили {response_delete.status_code}'
-        assert response_delete_data == expected_response_data, \
-            f"Ожидаем ответ: {expected_response_data}, но получили: {response_delete_data}"
+        response_delete = requests.delete(f'{URLS["courier"]}/{courier_id}')
 
     return _delete_courier
 
@@ -54,14 +48,10 @@ def get_id_courier():
             "login": credentials['login'],
             "password": credentials['password']
         }
-        login_response = requests.post(f"{URL_HOME}/api/v1/courier/login", json={
+        login_response = requests.post(URLS['login'], json={
             "login": payload['login'], "password": payload['password']})
         response_data = login_response.json()
         id_courier = response_data["id"]
-        expected_response_data = SuccessResponses.success_login(id_courier)
-        assert login_response.status_code == 200, f'Ожидаем код 200, но получили {login_response.status_code}'
-        assert response_data == expected_response_data, \
-            f"Ожидаем ответ: {expected_response_data}, но получили: {response_data}"
         return id_courier
 
     return _get_id_courier

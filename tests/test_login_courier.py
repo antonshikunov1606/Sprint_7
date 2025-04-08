@@ -1,11 +1,9 @@
 import allure
-import pytest
 import requests
 from faker import Faker
 import string
+from test_data import URLS, credentials
 from response_definitions import SuccessResponses, ErrorResponses
-
-URL_HOME = 'https://qa-scooter.praktikum-services.ru/'
 
 
 class TestLoginCourier:
@@ -18,7 +16,7 @@ class TestLoginCourier:
         }
 
         with allure.step("Проверка успешной авторизации курьера"):
-            login_response = requests.post(f"{URL_HOME}/api/v1/courier/login", json={
+            login_response = requests.post(URLS['login'], json={
                 "login": payload['login'], "password": payload['password']})
             response_data = login_response.json()
             id_courier = response_data["id"]
@@ -40,7 +38,7 @@ class TestLoginCourier:
             "password": credentials[1]
         }
         with allure.step("Проверка ошибка авторизации курьера без логина"):
-            login_response = requests.post(f"{URL_HOME}/api/v1/courier/login", json={
+            login_response = requests.post(URLS['login'], json={
                 "password": payload['password']
             })
             login_response_data = login_response.json()
@@ -65,7 +63,7 @@ class TestLoginCourier:
             "password": credentials[1]
         }
         with allure.step("Проверка ошибка авторизации курьера без пароля"):
-            login_response = requests.post(f"{URL_HOME}/api/v1/courier/login", json={
+            login_response = requests.post(URLS['login'], json={
                 "login": payload['login']
             })
             login_response_data = login_response.json()
@@ -94,7 +92,7 @@ class TestLoginCourier:
         random_login = ''.join(fake.random_choices(elements=string.ascii_letters, length=15))
 
         with allure.step("Проверка ошибка авторизации курьера с неправильным логином"):
-            login_response = requests.post(f"{URL_HOME}/api/v1/courier/login", json={
+            login_response = requests.post(URLS['login'], json={
                 "login": random_login, "password": payload['login']
             })
             login_response_data = login_response.json()
@@ -123,7 +121,7 @@ class TestLoginCourier:
         random_password = ''.join(fake.random_choices(elements=string.ascii_letters, length=15))
 
         with allure.step("Проверка ошибка авторизации курьера с неправильным паролем"):
-            login_response = requests.post(f"{URL_HOME}/api/v1/courier/login", json={
+            login_response = requests.post(URLS['login'], json={
                 "login": payload['login'], "password": random_password
             })
             login_response_data = login_response.json()

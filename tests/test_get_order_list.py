@@ -1,10 +1,7 @@
 import json
 import allure
-import pytest
 import requests
-from response_definitions import SuccessResponses, ErrorResponses
-
-URL_HOME = 'https://qa-scooter.praktikum-services.ru/'
+from test_data import URLS
 
 
 class TestGetOrderList:
@@ -13,7 +10,7 @@ class TestGetOrderList:
         params = {
             'nearestStation': json.dumps(["6"])
         }
-        list_response = requests.get(f'{URL_HOME}/api/v1/orders', params=params)
+        list_response = requests.get(URLS['orders'], params=params)
         response_data = list_response.json()
         metro_station = response_data['availableStations'][0]['name']
         expected_result = 'Комсомольская'
@@ -27,7 +24,7 @@ class TestGetOrderList:
         params = {
             'limit': 5
         }
-        list_response = requests.get(f'{URL_HOME}/api/v1/orders', params=params)
+        list_response = requests.get(URLS['orders'], params=params)
         response_data = list_response.json()
         limit = response_data['pageInfo']['limit']
         expected_result = params['limit']
@@ -41,7 +38,7 @@ class TestGetOrderList:
         params = {
             'page': 2
         }
-        list_response = requests.get(f'{URL_HOME}/api/v1/orders', params=params)
+        list_response = requests.get(URLS['orders'], params=params)
         response_data = list_response.json()
         current_page = response_data['pageInfo']['page']
         expected_result = params['page']
